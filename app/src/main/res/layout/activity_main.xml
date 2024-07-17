@@ -14,15 +14,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:text="NOWY ŻETON SŁABOŚCI Wybierz środowisko:"
-        android:textSize="24sp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:text="NOWY ŻETON TERENU"
+        android:textSize="24sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_marginBottom="32dp">
 
         <Button
             android:id="@+id/button1"
@@ -44,7 +45,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-
             android:text="GÓRY"/>
 
 
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="24dp"
-        android:text="NOWY LOKALIZACJA PŁOTKI Wybierz środowisko:"
+        android:text="NOWY LOKALIZACJA PŁOTKI"
         android:textSize="24sp"
         android:gravity="center"/>
 
@@ -67,7 +67,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_marginBottom="32dp">
 
         <Button
             android:id="@+id/plotkaButton1"
@@ -91,13 +92,32 @@
             android:text="GÓRY" />
 
 
+
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/wykluczoneTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="Wykluczone żetony:"
+        android:textSize="24sp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/wykluczoneZetonyTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textSize="18sp"
+        android:gravity="center"/>
 
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        />
+        android:layout_weight="1" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -4,6 +4,8 @@ import android.content.DialogInterface;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.witcheroldworldhelper.database.StanZetonow;
@@ -11,9 +13,12 @@ import com.example.witcheroldworldhelper.database.StanZetonowDB;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class MainViewModel extends ViewModel {
+
+    private MutableLiveData<List<Integer>> wykluczoneZetony = new MutableLiveData<>(new ArrayList<>());
     public ArrayList<Integer> las = new ArrayList<>(Arrays.asList(6, 7, 8, 10, 16, 17));
     public ArrayList<Integer> woda = new ArrayList<>(Arrays.asList(1, 4, 5, 12, 14, 15));
     public ArrayList<Integer> gory = new ArrayList<>(Arrays.asList(2, 3, 9, 11, 13, 18));
@@ -21,9 +26,16 @@ public class MainViewModel extends ViewModel {
     public  ArrayList<Integer> zajetaWoda = new ArrayList<>(Arrays.asList());
     public  ArrayList<Integer> zajeteGory = new ArrayList<>(Arrays.asList());
     public  Random random = new Random();
-
     public StanZetonowDB db;
 
+    public LiveData<List<Integer>> getWykluczoneZetony() {
+        return wykluczoneZetony;
+    }
+
+    public void setWykluczoneZetony(List<Integer> noweWykluczoneZetony) {
+        wykluczoneZetony.setValue(noweWykluczoneZetony);
+    }
+    
     void pobierzStanZetonowZBazy() {
 
         try {
@@ -86,9 +98,10 @@ public class MainViewModel extends ViewModel {
     void wyswietlWykluczone() {
 
     }
+
     String przywrocZeton(int numer) {
 
-        String message = "Pomyślnie przywrócono żeton" + numer;
+        String message = "Pomyślnie przywrócono żeton " + numer;
 
         if (zajetyLas.contains(numer)) {
             zajetyLas.remove(Integer.valueOf(numer));
@@ -109,7 +122,7 @@ public class MainViewModel extends ViewModel {
             zapiszStanZetonow();
             return message;
         } else {
-            return "Żeton " + numer + " nie znajduje się w puli wykluczonej.";
+            return "Żeton " + numer + " nie znajduje się w puli wykluczonej!";
         }
     }
 
