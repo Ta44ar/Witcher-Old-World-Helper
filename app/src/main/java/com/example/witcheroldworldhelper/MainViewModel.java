@@ -37,7 +37,6 @@ public class MainViewModel extends ViewModel {
     }
     
     void pobierzStanZetonowZBazy() {
-
         try {
             StanZetonow stanZetonow = db.stanZetonowDao().getStanZetonow();
             las = stanZetonow.las;
@@ -107,17 +106,29 @@ public class MainViewModel extends ViewModel {
             zajetyLas.remove(Integer.valueOf(numer));
             las.add(numer);
 
+            List<Integer> currentList = wykluczoneZetony.getValue();
+            currentList.remove(Integer.valueOf(numer));
+            wykluczoneZetony.setValue(currentList);
+
             zapiszStanZetonow();
             return message;
         } else if (zajetaWoda.contains(numer)) {
             zajetaWoda.remove(Integer.valueOf(numer));
             woda.add(numer);
 
+            List<Integer> currentList = wykluczoneZetony.getValue();
+            currentList.remove(Integer.valueOf(numer));
+            wykluczoneZetony.setValue(currentList);
+
             zapiszStanZetonow();
             return message;
         } else if (zajeteGory.contains(numer)) {
             zajeteGory.remove(Integer.valueOf(numer));
             gory.add(numer);
+
+            List<Integer> currentList = wykluczoneZetony.getValue();
+            currentList.remove(Integer.valueOf(numer));
+            wykluczoneZetony.setValue(currentList);
 
             zapiszStanZetonow();
             return message;
@@ -128,11 +139,15 @@ public class MainViewModel extends ViewModel {
 
     String wykluczZeton(int numer) {
 
-        String message = "Pomyślnie zajęto żeton" + numer;
+        String message = "Pomyślnie zajęto żeton " + numer;
 
         if(las.contains(numer)) {
             las.remove(Integer.valueOf(numer));
             zajetyLas.add(numer);
+
+            List<Integer> currentList = wykluczoneZetony.getValue();
+            currentList.add(numer);
+            wykluczoneZetony.setValue(currentList);
 
             zapiszStanZetonow();
             return message;
@@ -140,16 +155,25 @@ public class MainViewModel extends ViewModel {
             woda.remove(Integer.valueOf(numer));
             zajetaWoda.add(numer);
 
+            List<Integer> currentList = wykluczoneZetony.getValue();
+            currentList.add(numer);
+            wykluczoneZetony.setValue(currentList);
+
             zapiszStanZetonow();
             return message;
         } else if(gory.contains(numer)) {
             gory.remove(Integer.valueOf(numer));;
             zajeteGory.add(numer);
 
+
+            List<Integer> currentList = wykluczoneZetony.getValue();
+            currentList.add(numer);
+            wykluczoneZetony.setValue(currentList);
+
             zapiszStanZetonow();
             return message;
         } else {
-            return "Żeton " + numer + " nie istnieje";
+            return "Żeton " + numer + " nie istnieje!";
         }
     }
 
@@ -169,6 +193,8 @@ public class MainViewModel extends ViewModel {
                 zajetaWoda,
                 zajeteGory
         );
+
+        wykluczoneZetony.setValue(new ArrayList<>());
 
         db.stanZetonowDao().updateStanZetnow(nowyStanZetonow);
     }

@@ -12,18 +12,21 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
 import com.example.witcheroldworldhelper.database.StanZetonowDB;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView resultTextView;
     private TextView resultTextView2;
-
+    private TextView listaWykluczonychTextView;
+    private TextView wykluczoneTextView;
 
 
     private MainViewModel viewModel;
@@ -50,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
 
         resultTextView = findViewById(R.id.resultTextView);
         resultTextView2 = findViewById(R.id.resultTextView2);
+        listaWykluczonychTextView = findViewById(R.id.listaWykluczonychTextView);
+        wykluczoneTextView = findViewById(R.id.wykluczoneTextView);
+
         Button button1 = findViewById(R.id.button1);
         Button button2 = findViewById(R.id.button2);
         Button button3 = findViewById(R.id.button3);
@@ -63,21 +69,21 @@ public class MainActivity extends AppCompatActivity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pokazWynikDlaZetonuSlabosci(viewModel.las);
+                pokazWynikLosowaniaZetonu(viewModel.las);
             }
         });
 
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pokazWynikDlaZetonuSlabosci(viewModel.woda);
+                pokazWynikLosowaniaZetonu(viewModel.woda);
             }
         });
 
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pokazWynikDlaZetonuSlabosci(viewModel.gory);
+                pokazWynikLosowaniaZetonu(viewModel.gory);
             }
         });
 
@@ -118,8 +124,29 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) { resetujAplikacje(); }
         });
+
+        viewModel.getWykluczoneZetony().observe(this, new Observer<List<Integer>>() {
+            @Override
+            public void onChanged(List<Integer> wykluczoneZetony) {
+                aktualizujWykluczoneZetonyTextView(wykluczoneZetony);
+            }
+        });
+
+        aktualizujWykluczoneZetonyTextView(viewModel.getWykluczoneZetony().getValue());
     }
-    void pokazWynikDlaZetonuSlabosci(final ArrayList<Integer> srodowisko) {
+
+    void aktualizujWykluczoneZetonyTextView(List<Integer> wykluczoneZetony) {
+        if (wykluczoneZetony == null || wykluczoneZetony.isEmpty()) {
+            listaWykluczonychTextView.setVisibility(View.GONE);
+            wykluczoneTextView.setVisibility(View.GONE);
+        } else {
+            listaWykluczonychTextView.setVisibility(View.VISIBLE);
+            wykluczoneTextView.setVisibility(View.VISIBLE);
+            listaWykluczonychTextView.setText(wykluczoneZetony.toString());
+        }
+    }
+
+    void pokazWynikLosowaniaZetonu(final ArrayList<Integer> srodowisko) {
         int randomValue = viewModel.losujZetonSlabosci(srodowisko);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -129,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Losowanie ponownie po naciśnięciu przycisku "Losuj ponownie"
-                pokazWynikDlaZetonuSlabosci(srodowisko);
+                pokazWynikLosowaniaZetonu(srodowisko);
             }
         });
         builder.setNegativeButton("Zamknij", null);
@@ -170,11 +197,12 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(input.getText().toString() != "") {
-                            String result = viewModel.przywrocZeton(Integer.valueOf(input.getText().toString()));
-
+                        String inputText = input.getText().toString();
+                        if (!inputText.isEmpty()) {
+                            String result = viewModel.przywrocZeton(Integer.valueOf(inputText));
                             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Proszę podać numer żetonu.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -193,18 +221,20 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(input.getText().toString() != "") {
-                            String result = viewModel.wykluczZeton(Integer.valueOf(input.getText().toString()));
-
+                        String inputText = input.getText().toString();
+                        if (!inputText.isEmpty()) {
+                            String result = viewModel.wykluczZeton(Integer.valueOf(inputText));
                             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-
-                    }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Proszę podać numer żetonu.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
 
     void resetujAplikacje() {
 

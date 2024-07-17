@@ -106,11 +106,12 @@
         android:gravity="center"/>
 
     <TextView
-        android:id="@+id/wykluczoneZetonyTextView"
+        android:id="@+id/listaWykluczonychTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:textSize="18sp"
+        android:text="Wykluczone żetony:"
+        android:textSize="24sp"
         android:gravity="center"/>
 
     <View
@@ -145,6 +146,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:text="Resetuj żetony" />
+        android:text="Resetuj aplikację" />
 
 </LinearLayout>
