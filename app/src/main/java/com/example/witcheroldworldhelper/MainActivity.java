@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView resultTextView2;
     private TextView listaWykluczonychTextView;
     private TextView wykluczoneTextView;
+    private Button skelligeButton;
 
 
     private MainViewModel viewModel;
@@ -45,11 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
         viewModel.setDb(db);
         viewModel.pobierzStanZetonowZBazy();
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-//            return insets;
-//        });
 
         resultTextView = findViewById(R.id.resultTextView);
         resultTextView2 = findViewById(R.id.resultTextView2);
@@ -65,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         Button wykluczButton = findViewById(R.id.wykluczZeton);
         Button przywrocButton = findViewById(R.id.przywrocZeton);
         Button resetButton = findViewById(R.id.reset);
+        skelligeButton = findViewById(R.id.skelligeButton);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,7 +119,17 @@ public class MainActivity extends AppCompatActivity {
 
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { resetujAplikacje(); }
+            public void onClick(View v) {
+                resetujAplikacje();
+            }
+        });
+
+        skelligeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                skellige();
+                skelligeButton.setVisibility(View.GONE);
+            }
         });
 
         viewModel.getWykluczoneZetony().observe(this, new Observer<List<Integer>>() {
@@ -134,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
         aktualizujWykluczoneZetonyTextView(viewModel.getWykluczoneZetony().getValue());
     }
+
 
     void aktualizujWykluczoneZetonyTextView(List<Integer> wykluczoneZetony) {
         if (wykluczoneZetony == null || wykluczoneZetony.isEmpty()) {
@@ -235,7 +243,6 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-
     void resetujAplikacje() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -245,6 +252,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 viewModel.resetAplikacji();
+                skelligeButton.setVisibility(View.VISIBLE);
             }
         });
         builder.setNegativeButton("NIE", null);
@@ -253,7 +261,9 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    void skellige() {
 
-
-
+        String message = viewModel.dodajSkellige();
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
 }

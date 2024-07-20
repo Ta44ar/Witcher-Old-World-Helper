@@ -1,9 +1,8 @@
 package com.example.witcheroldworldhelper;
 
-import android.content.DialogInterface;
-import android.widget.Toast;
+import android.accessibilityservice.GestureDescription;
+import android.widget.Button;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -19,14 +18,17 @@ import java.util.Random;
 public class MainViewModel extends ViewModel {
 
     private MutableLiveData<List<Integer>> wykluczoneZetony = new MutableLiveData<>(new ArrayList<>());
+    public boolean skelligeDodane = false;
     public ArrayList<Integer> las = new ArrayList<>(Arrays.asList(6, 7, 8, 10, 16, 17));
     public ArrayList<Integer> woda = new ArrayList<>(Arrays.asList(1, 4, 5, 12, 14, 15));
     public ArrayList<Integer> gory = new ArrayList<>(Arrays.asList(2, 3, 9, 11, 13, 18));
-    public  ArrayList<Integer> zajetyLas = new ArrayList<>(Arrays.asList());
-    public  ArrayList<Integer> zajetaWoda = new ArrayList<>(Arrays.asList());
-    public  ArrayList<Integer> zajeteGory = new ArrayList<>(Arrays.asList());
-    public  Random random = new Random();
+    public ArrayList<Integer> zajetyLas = new ArrayList<>(Arrays.asList());
+    public ArrayList<Integer> zajetaWoda = new ArrayList<>(Arrays.asList());
+    public ArrayList<Integer> zajeteGory = new ArrayList<>(Arrays.asList());
+    public Random random = new Random();
     public StanZetonowDB db;
+
+    public Button button;
 
     public LiveData<List<Integer>> getWykluczoneZetony() {
         return wykluczoneZetony;
@@ -55,8 +57,6 @@ public class MainViewModel extends ViewModel {
             zajeteGory = new ArrayList<>(Arrays.asList());
         }
     }
-
-
 
     public void setDb(StanZetonowDB db) {
         this.db = db;
@@ -94,15 +94,12 @@ public class MainViewModel extends ViewModel {
         return wylosowaneZetony;
     }
 
-    void wyswietlWykluczone() {
-
-    }
-
     String przywrocZeton(int numer) {
 
         String message = "Pomyślnie przywrócono żeton " + numer;
 
         if (zajetyLas.contains(numer)) {
+
             zajetyLas.remove(Integer.valueOf(numer));
             las.add(numer);
 
@@ -112,7 +109,9 @@ public class MainViewModel extends ViewModel {
 
             zapiszStanZetonow();
             return message;
+
         } else if (zajetaWoda.contains(numer)) {
+
             zajetaWoda.remove(Integer.valueOf(numer));
             woda.add(numer);
 
@@ -122,7 +121,9 @@ public class MainViewModel extends ViewModel {
 
             zapiszStanZetonow();
             return message;
+
         } else if (zajeteGory.contains(numer)) {
+
             zajeteGory.remove(Integer.valueOf(numer));
             gory.add(numer);
 
@@ -132,8 +133,11 @@ public class MainViewModel extends ViewModel {
 
             zapiszStanZetonow();
             return message;
+
         } else {
+
             return "Żeton " + numer + " nie znajduje się w puli wykluczonej!";
+
         }
     }
 
@@ -142,6 +146,7 @@ public class MainViewModel extends ViewModel {
         String message = "Pomyślnie zajęto żeton " + numer;
 
         if(las.contains(numer)) {
+
             las.remove(Integer.valueOf(numer));
             zajetyLas.add(numer);
 
@@ -151,6 +156,7 @@ public class MainViewModel extends ViewModel {
 
             zapiszStanZetonow();
             return message;
+
         } else if(woda.contains(numer)) {
             woda.remove(Integer.valueOf(numer));
             zajetaWoda.add(numer);
@@ -161,6 +167,7 @@ public class MainViewModel extends ViewModel {
 
             zapiszStanZetonow();
             return message;
+
         } else if(gory.contains(numer)) {
             gory.remove(Integer.valueOf(numer));;
             zajeteGory.add(numer);
@@ -172,12 +179,16 @@ public class MainViewModel extends ViewModel {
 
             zapiszStanZetonow();
             return message;
+
         } else {
+
             return "Żeton " + numer + " nie istnieje!";
+
         }
     }
 
     void resetAplikacji() {
+
         las = new ArrayList<>(Arrays.asList(6, 7, 8, 10, 16, 17));
         woda = new ArrayList<>(Arrays.asList(1, 4, 5, 12, 14, 15));
         gory = new ArrayList<>(Arrays.asList(2, 3, 9, 11, 13, 18));
@@ -211,5 +222,35 @@ public class MainViewModel extends ViewModel {
         db.stanZetonowDao().updateStanZetnow(nowyStanZetonow);
     }
 
+    String dodajSkellige() {
 
+        String message = "Dodano lokacje Skellige do gry.";
+
+        gory.add(19);
+        woda.add(20);
+        las.add(21);
+        skelligeDodane = true;
+
+        return message;
+    }
+
+//    String usunSkellige() {
+//
+//        String message = "Usunięto lokacje Skellige z gry.";
+//
+//        gory.remove(Integer.valueOf(19));
+//        woda.remove(Integer.valueOf(20));
+//        las.remove(Integer.valueOf(21));
+//        skelligeDodane = false;
+//
+//        return message;
+//    }
+
+//    String obsluzSkellige() {
+//        if(skelligeDodane) {
+//            return usunSkellige();
+//        } else {
+//            return dodajSkellige();
+//        }
+//    }
 }

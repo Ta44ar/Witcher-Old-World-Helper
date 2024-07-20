@@ -30,7 +30,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-
             android:text="LAS"/>
 
         <Button
@@ -47,11 +46,7 @@
             android:layout_margin="4dp"
             android:text="GÓRY"/>
 
-
-
     </LinearLayout>
-
-
 
     <TextView
         android:id="@+id/resultTextView2"
@@ -90,8 +85,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:text="GÓRY" />
-
-
 
     </LinearLayout>
 
@@ -141,11 +134,26 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/reset"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:text="Resetuj aplikację" />
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="Resetuj aplikację" />
+
+        <Button
+            android:id="@+id/skelligeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="+ Skellige" />
+
+    </LinearLayout>
 
 </LinearLayout>
